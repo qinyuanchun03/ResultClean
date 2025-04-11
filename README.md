@@ -131,6 +131,16 @@
 
 如有问题或建议，请联系作者。
 
+- 小红书反馈
+![](https://blog1.jianghu.cfd/imgs/notions/xhs.jpg)
+
+- QQ频道
+![](https://blog1.jianghu.cfd/imgs/notions/qqpd.jpg)
+
+- VX公众号
+![](https://blog1.jianghu.cfd/imgs/notions/vxt.jpg)
+
+
 ---
 
 希望"干净的页面"能够帮助您获得更好的搜索体验！
