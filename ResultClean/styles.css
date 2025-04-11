@@ -1,0 +1,404 @@
+/* 全局样式 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Microsoft YaHei', Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.container {
+  width: 360px;
+  padding: 15px;
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #4285f4;
+  text-align: center;
+}
+
+h2 {
+  font-size: 16px;
+  margin: 15px 0 10px;
+  color: #555;
+}
+
+h3 {
+  font-size: 14px;
+  margin: 12px 0 8px;
+  color: #666;
+}
+
+/* 菜单样式 */
+.menu-container {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.menu {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  padding: 8px 15px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+  background-color: #f0f0f0;
+}
+
+.menu-item.active {
+  border-bottom: 2px solid #4285f4;
+  color: #4285f4;
+  font-weight: bold;
+}
+
+/* 面板内容样式 */
+.tab-content {
+  display: none;
+  padding: 10px 0;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* 开关样式 */
+.switch-container {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #4285f4;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #4285f4;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 24px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.switch-label {
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+/* 统计信息样式 */
+.stats-container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+/* 规则列表样式 */
+.rules-container, .custom-rules-list-container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+}
+
+.rules-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.rule-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.rule-item:last-child {
+  border-bottom: none;
+}
+
+.rule-text {
+  flex-grow: 1;
+  font-size: 14px;
+}
+
+.delete-rule {
+  background: none;
+  border: none;
+  color: #ff4444;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-rule {
+  display: flex;
+  margin-top: 10px;
+}
+
+.add-rule input {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px 0 0 4px;
+  font-size: 14px;
+}
+
+.add-rule button {
+  padding: 8px 12px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.add-rule button:hover {
+  background-color: #3367d6;
+}
+
+/* 导入导出样式 */
+.import-export-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+}
+
+.import-container, .export-container {
+  padding-bottom: 10px;
+}
+
+.description {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.file-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+input[type="file"] {
+  flex-grow: 1;
+  font-size: 12px;
+}
+
+#importBtn, #exportBtn {
+  padding: 6px 12px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#importBtn:hover, #exportBtn:hover {
+  background-color: #3367d6;
+}
+
+/* 主页插件介绍样式 */
+.intro-container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+}
+
+.intro-content p {
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.default-sites {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.default-sites li {
+  margin-bottom: 5px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.rule-format {
+  background-color: #f8f8f8;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 15px;
+}
+
+.rule-format h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.rule-format ul {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.rule-format li {
+  margin-bottom: 5px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rule-format code, .rule-format-small code {
+  background-color: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  color: #e83e8c;
+}
+
+.rule-format-small {
+  background-color: #f8f8f8;
+  border-radius: 6px;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 13px;
+}
+
+.rule-format-small p {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.rule-format-small pre {
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  background-color: #f0f0f0;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 0;
+  line-height: 1.4;
+  color: #333;
+}
+
+/* 关于插件样式 */
+.about-content {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.about-content p {
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.about-content ul {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.about-content li {
+  margin-bottom: 5px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.about-content code {
+  background-color: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+}
+
+/* 内容页面的过滤计数器样式 */
+.filter-counter {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #ff4444;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  z-index: 9999;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: opacity 0.3s ease-in-out;
+}

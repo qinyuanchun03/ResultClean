@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "干净的页面",
+  "version": "1.0.0",
+  "description": "去除搜索结果中的无用站点",
+  "author": "江湖笔者",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": [
+    "*://www.google.com/search*",
+    "*://www.bing.com/search*",
+    "*://cn.bing.com/search*",
+    "*://www.baidu.com/s*"
+  ],
+  "rules_domain": [
+    "csdn.net",
+    "zhihu.com",
+    "docin.com",
+    "doc88.com",
+    "*.csdn.net/*",
+    "*.zhihu.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://www.google.com/search*",
+        "*://www.bing.com/search*",
+        "*://cn.bing.com/search*",
+        "*://www.baidu.com/s*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

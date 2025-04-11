@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>干净的页面</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>干净的页面</h1>
+
+    <!-- 菜单栏 -->
+    <div class="menu-container">
+      <ul class="menu">
+        <li class="menu-item active" data-tab="main">主页</li>
+        <li class="menu-item" data-tab="custom-rules">自定义规则</li>
+        <li class="menu-item" data-tab="about">关于插件</li>
+      </ul>
+    </div>
+
+    <!-- 主页面板 -->
+    <div class="tab-content active" id="main-tab">
+      <div class="switch-container">
+        <label class="switch">
+          <input type="checkbox" id="enableFilter" checked>
+          <span class="slider round"></span>
+        </label>
+        <span class="switch-label">启用过滤</span>
+      </div>
+
+      <div class="stats-container">
+        <h2>过滤统计</h2>
+        <div class="stat-item">
+          <span>当前搜索结果:</span>
+          <span id="totalResults">0</span>
+        </div>
+        <div class="stat-item">
+          <span>符合规则数量:</span>
+          <span id="matchedResults">0</span>
+        </div>
+        <div class="stat-item">
+          <span>已屏蔽数量:</span>
+          <span id="currentFiltered">0</span>
+        </div>
+        <div class="stat-item">
+          <span>累计屏蔽数量:</span>
+          <span id="totalFiltered">0</span>
+        </div>
+      </div>
+
+      <div class="intro-container">
+        <h2>插件介绍</h2>
+        <div class="intro-content">
+          <p>「干净的页面」是一个去除搜索结果中无用站点的扩展程序。</p>
+          <p>默认支持过滤以下网站：</p>
+          <ul class="default-sites">
+            <li>CSDN (csdn.net 及其子域名)</li>
+            <li>知乎 (zhihu.com 及其子域名)</li>
+            <li>豆丁网 (docin.com)</li>
+            <li>DOC88 (doc88.com)</li>
+          </ul>
+          <p>您可以在「自定义规则」面板中添加或导入更多规则。</p>
+          <div class="rule-format">
+            <h3>规则格式规范：</h3>
+            <ul>
+              <li>普通域名：<code>example.com</code></li>
+              <li>泛域名：<code>*.example.com</code></li>
+              <li>域名路径：<code>example.com/*</code></li>
+              <li>泛域名路径：<code>*.example.com/*</code></li>
+            </ul>
+            <p>注意：导入规则时，每行一个域名或泛域名，必须严格符合上述格式。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 自定义规则面板 -->
+    <div class="tab-content" id="custom-rules-tab">
+      <h2>自定义过滤规则</h2>
+      <div class="import-export-container">
+        <div class="import-container">
+          <h3>导入规则</h3>
+          <p class="description">支持导入txt格式的规则文件，每行一个域名或泛域名</p>
+          <div class="rule-format-small">
+            <p>有效格式示例：</p>
+            <pre>example.com
+*.example.com
+example.com/*
+*.example.com/*</pre>
+          </div>
+          <div class="file-input-container">
+            <input type="file" id="importFile" accept=".txt">
+            <button id="importBtn">导入规则</button>
+          </div>
+        </div>
+
+        <div class="export-container">
+          <h3>导出规则</h3>
+          <p class="description">将当前所有规则导出为txt文件</p>
+          <button id="exportBtn">导出规则</button>
+        </div>
+      </div>
+
+      <div class="custom-rules-list-container">
+        <h3>当前规则列表</h3>
+        <div class="rules-list" id="customRulesList">
+          <!-- 自定义规则列表将通过JS动态生成 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 关于插件面板 -->
+    <div class="tab-content" id="about-tab">
+      <h2>关于插件</h2>
+      <div class="about-content">
+        <p><strong>插件名称：</strong>干净的页面</p>
+        <p><strong>版本：</strong>1.0.0</p>
+        <p><strong>作者：</strong>江湖笔者</p>
+        <p><strong>描述：</strong>去除搜索结果中的无用站点，支持泛域名匹配功能。</p>
+        <p><strong>使用说明：</strong></p>
+        <ul>
+          <li>普通域名规则：如 <code>csdn.net</code></li>
+          <li>泛域名规则：如 <code>*.csdn.net</code> 匹配所有子域名</li>
+          <li>域名路径规则：如 <code>csdn.net/*</code> 匹配所有路径</li>
+          <li>泛域名路径规则：如 <code>*.csdn.net/*</code> 匹配所有子域名和路径</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
