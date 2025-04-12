@@ -32,7 +32,7 @@ function init() {
   });
 
   // 监听来自popup的消息
-  chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  chrome.runtime.onMessage.addListener(function(message) {
     if (message.action === 'toggleFilter') {
       enabled = message.enabled;
       if (enabled) {
@@ -52,9 +52,13 @@ function init() {
 
 // 创建计数器元素
 function createCounter() {
+  // 如果已存在计数器，则先移除
+  if (counter) {
+    counter.remove();
+  }
+
   counter = document.createElement('div');
   counter.className = 'filter-counter';
-  counter.style.opacity = '0';
   counter.style.display = 'none';
   document.body.appendChild(counter);
 }
@@ -66,27 +70,45 @@ function updateCounter() {
     clearTimeout(hideTimeout);
   }
 
-  counter.style.opacity = '1';
+  // 获取总结果数量
+  let totalResults = 0;
+
+  // 根据不同搜索引擎获取搜索结果
+  if (window.location.hostname.includes('google.com')) {
+    totalResults = document.querySelectorAll('.g').length;
+  } else if (window.location.hostname.includes('bing.com')) {
+    totalResults = document.querySelectorAll('.b_algo').length;
+  } else if (window.location.hostname.includes('baidu.com')) {
+    totalResults = document.querySelectorAll('.result').length;
+  }
+
+  // 获取累计屏蔽数量
+  const totalFiltered = parseInt(localStorage.getItem('totalFiltered') || '0');
+
+  // 更新计数器显示
+  counter.textContent = `总搜索结果 ${totalResults} 条，已屏蔽 ${removedCount} 条。累计屏蔽 ${totalFiltered} 条`;
+
+  // 显示计数器
   counter.style.display = 'block';
+  // 使用requestAnimationFrame确保动画流畅
+  requestAnimationFrame(() => {
+    counter.classList.add('show');
+  });
 
-  // 从存储中获取统计信息
-  chrome.storage.local.get(['totalResults', 'matchedResults', 'currentFiltered', 'totalFiltered'], function(data) {
-    const totalResults = data.totalResults || 0;
-    const matchedResults = data.matchedResults || 0;
-    const currentFiltered = data.currentFiltered || 0;
-    const totalFiltered = data.totalFiltered || 0;
+  // 3秒后淡出
+  hideTimeout = setTimeout(() => {
+    counter.classList.remove('show');
+    // 等待淡出动画完成后隐藏元素
+    setTimeout(() => {
+      counter.style.display = 'none';
+    }, 300);
+  }, 3000);
 
-    // 更新计数器显示
-    counter.textContent = `总搜索结果 ${totalResults} 条，符合规则 ${matchedResults} 条，已屏蔽 ${currentFiltered} 条。累计屏蔽 ${totalFiltered} 条`;
-
-    // 3秒后淡出
-    hideTimeout = setTimeout(() => {
-      counter.style.opacity = '0';
-      // 等待淡出动画完成后隐藏元素
-      setTimeout(() => {
-        counter.style.display = 'none';
-      }, 300);
-    }, 3000);
+  // 将统计信息保存到storage中，供弹出页面使用
+  chrome.storage.local.set({
+    totalResults: totalResults,
+    currentFiltered: removedCount,
+    totalFiltered: totalFiltered
   });
 }
 
@@ -137,61 +159,65 @@ function removeSearchResults() {
   if (!enabled) return;
 
   let results = [];
+  let hasChanges = false;
 
   // 根据不同搜索引擎获取搜索结果
   if (window.location.hostname.includes('google.com')) {
-    results = document.querySelectorAll('.g');
+    results = document.querySelectorAll('.g:not([data-filtered="true"])');
   } else if (window.location.hostname.includes('bing.com')) {
-    results = document.querySelectorAll('.b_algo');
+    results = document.querySelectorAll('.b_algo:not([data-filtered="true"])');
   } else if (window.location.hostname.includes('baidu.com')) {
-    results = document.querySelectorAll('.result');
+    results = document.querySelectorAll('.result:not([data-filtered="true"])');
   }
 
-  // 重置已移除计数
-  removedCount = 0;
+  // 如果没有新的结果需要处理，则直接返回
+  if (results.length === 0) return;
 
-  // 统计符合规则的结果数量
-  let matchedResults = 0;
-
+  // 处理新的搜索结果
   results.forEach(div => {
     // 检查div及其子元素中的所有链接
     const links = div.querySelectorAll('a');
     let shouldRemove = false;
 
-    links.forEach(link => {
-      if (shouldFilter(link.href)) {
-        shouldRemove = true;
-      }
-    });
-
-    // 如果div本身包含目标文本也移除
-    const text = div.textContent.toLowerCase();
-    for (const rule of rules) {
-      // 对于泛域名规则，只检查基本域名部分
-      let domainToCheck = rule;
-      if (rule.startsWith('*.')) {
-        domainToCheck = rule.substring(2);
-      }
-      if (rule.endsWith('/*')) {
-        domainToCheck = domainToCheck.substring(0, domainToCheck.length - 2);
-      }
-
-      if (text.includes(domainToCheck)) {
+    // 快速检查链接
+    for (let i = 0; i < links.length; i++) {
+      if (shouldFilter(links[i].href)) {
         shouldRemove = true;
         break;
       }
     }
 
-    // 统计符合规则的结果数量
-    if (shouldRemove) {
-      matchedResults++;
+    // 如果链接检查没有命中，再检查文本内容
+    if (!shouldRemove) {
+      const text = div.textContent.toLowerCase();
+      for (const rule of rules) {
+        // 对于泛域名规则，只检查基本域名部分
+        let domainToCheck = rule;
+        if (rule.startsWith('*.')) {
+          domainToCheck = rule.substring(2);
+        }
+        if (rule.endsWith('/*')) {
+          domainToCheck = domainToCheck.substring(0, domainToCheck.length - 2);
+        }
 
+        if (text.includes(domainToCheck)) {
+          shouldRemove = true;
+          break;
+        }
+      }
+    }
+
+    // 标记元素为已处理
+    div.setAttribute('data-filtered', 'true');
+
+    // 如果需要移除
+    if (shouldRemove) {
       // 找到最近的搜索结果容器
       const resultContainer = div.closest('.g, .b_algo, .result');
-      if (resultContainer && !resultContainer.hasBeenRemoved) {
-        resultContainer.hasBeenRemoved = true; // 标记以防重复计数
+      if (resultContainer) {
         resultContainer.remove();
         removedCount++;
+        hasChanges = true;
 
         // 更新累计屏蔽数量
         let totalFiltered = parseInt(localStorage.getItem('totalFiltered') || '0');
@@ -201,19 +227,10 @@ function removeSearchResults() {
     }
   });
 
-  // 更新统计信息
-  const totalFiltered = parseInt(localStorage.getItem('totalFiltered') || '0');
-
-  // 将统计信息保存到storage中，供弹出页面使用
-  chrome.storage.local.set({
-    totalResults: results.length,
-    matchedResults: matchedResults,
-    currentFiltered: removedCount,
-    totalFiltered: totalFiltered
-  });
-
-  // 更新计数器显示
-  updateCounter();
+  // 只有当有变化时才更新计数器
+  if (hasChanges) {
+    updateCounter();
+  }
 }
 
 // 开始过滤
@@ -221,12 +238,23 @@ function startFiltering() {
   // 初始执行一次过滤
   removeSearchResults();
 
-  // 创建观察器实例
-  observer = new MutationObserver((mutations) => {
-    removeSearchResults();
-  });
+  // 创建观察器实例，使用节流函数减少调用频率
+  observer = new MutationObserver(debounce((mutations) => {
+    // 检查是否有相关变化
+    const hasRelevantChanges = mutations.some(mutation => {
+      // 检查是否有新添加的节点
+      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+        return true;
+      }
+      return false;
+    });
 
-  // 配置观察器选项
+    if (hasRelevantChanges) {
+      removeSearchResults();
+    }
+  }, 200)); // 200毫秒的节流时间
+
+  // 配置观察器选项，只观察子节点变化
   const config = {
     childList: true,
     subtree: true
@@ -235,15 +263,51 @@ function startFiltering() {
   // 开始观察
   observer.observe(document.body, config);
 
-  // 定期检查，以防漏掉一些动态加载的内容
-  setInterval(removeSearchResults, 3000);
+  // 定期检查，但间隔更长，减少资源占用
+  const checkInterval = setInterval(() => {
+    if (document.visibilityState === 'visible') { // 只在页面可见时运行
+      removeSearchResults();
+    }
+  }, 5000); // 5秒检查一次
+
+  // 将定时器存储起来，以便停止时清除
+  window._filterCheckInterval = checkInterval;
+}
+
+// 节流函数，减少函数调用频率
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(this, args);
+    }, wait);
+  };
 }
 
 // 停止过滤
 function stopFiltering() {
+  // 停止观察器
   if (observer) {
     observer.disconnect();
     observer = null;
+  }
+
+  // 清除定时器
+  if (window._filterCheckInterval) {
+    clearInterval(window._filterCheckInterval);
+    window._filterCheckInterval = null;
+  }
+
+  // 清除淡出计时器
+  if (hideTimeout) {
+    clearTimeout(hideTimeout);
+    hideTimeout = null;
+  }
+
+  // 隐藏计数器
+  if (counter) {
+    counter.style.display = 'none';
   }
 }
 

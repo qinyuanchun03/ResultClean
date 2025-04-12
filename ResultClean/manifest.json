@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "干净的页面",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "去除搜索结果中的无用站点",
   "author": "江湖笔者",
   "permissions": ["storage", "activeTab"],
