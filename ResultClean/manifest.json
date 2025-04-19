@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "干净的页面",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "去除搜索结果中的无用站点",
   "author": "江湖笔者",
   "permissions": ["storage", "activeTab"],
@@ -22,15 +22,17 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/ico16.ico",
+      "32": "icons/ico32.ico",
+      "48": "icons/ico48.ico",
+      "128": "icons/ico128.ico"
     }
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/ico16.ico",
+    "32": "icons/ico32.ico",
+    "48": "icons/ico48.ico",
+    "128": "icons/ico128.ico"
   },
   "content_scripts": [
     {

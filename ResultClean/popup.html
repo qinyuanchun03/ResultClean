@@ -1,138 +1,174 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="干净的页面 - 去除搜索结果中的无用站点">
+  <meta name="theme-color" content="#ffffff">
   <title>干净的页面</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="icons/ico16.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="icons/ico16.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="icons/ico128.ico">
 </head>
 <body>
   <div class="container">
-    <h1>干净的页面</h1>
+    <header>
+      <h1>
+        <img src="icons/ico16.ico" alt="" width="16" height="16" loading="eager" aria-hidden="true">
+        <span>干净的页面</span>
+      </h1>
+    </header>
 
-    <!-- 菜单栏 -->
-    <div class="menu-container">
-      <ul class="menu">
-        <li class="menu-item active" data-tab="main">主页</li>
-        <li class="menu-item" data-tab="custom-rules">自定义规则</li>
-        <li class="menu-item" data-tab="about">关于插件</li>
+    <nav class="menu-container">
+      <ul class="menu" role="tablist" aria-label="主导航">
+        <li>
+          <button class="menu-item active" data-tab="main" role="tab" aria-selected="true" aria-controls="main-tab">
+            主页
+          </button>
+        </li>
+        <li>
+          <button class="menu-item" data-tab="custom-rules" role="tab" aria-selected="false" aria-controls="custom-rules-tab">
+            自定义规则
+          </button>
+        </li>
+        <li>
+          <button class="menu-item" data-tab="about" role="tab" aria-selected="false" aria-controls="about-tab">
+            关于插件
+          </button>
+        </li>
       </ul>
-    </div>
+    </nav>
 
-    <!-- 主页面板 -->
-    <div class="tab-content active" id="main-tab">
-      <div class="switch-container">
-        <label class="switch">
-          <input type="checkbox" id="enableFilter" checked>
-          <span class="slider round"></span>
-        </label>
-        <span class="switch-label">启用过滤</span>
-      </div>
+    <main>
+      <section class="tab-content active" id="main-tab" role="tabpanel" aria-labelledby="main-tab">
+        <div class="switch-container">
+          <label class="switch" for="enableFilter">
+            <input type="checkbox" id="enableFilter" checked aria-label="启用过滤">
+            <span class="slider round"></span>
+          </label>
+          <span class="switch-label">启用过滤</span>
+        </div>
 
-      <div class="stats-container">
-        <h2>过滤统计</h2>
-        <div class="stat-item">
-          <span>当前搜索结果:</span>
-          <span id="totalResults">0</span>
-        </div>
-        <div class="stat-item">
-          <span>符合规则数量:</span>
-          <span id="matchedResults">0</span>
-        </div>
-        <div class="stat-item">
-          <span>已屏蔽数量:</span>
-          <span id="currentFiltered">0</span>
-        </div>
-        <div class="stat-item">
-          <span>累计屏蔽数量:</span>
-          <span id="totalFiltered">0</span>
-        </div>
-      </div>
+        <section class="stats-container" aria-labelledby="stats-title">
+          <h2 id="stats-title">过滤统计</h2>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <span id="totalResults-label">当前搜索结果</span>
+              <strong id="totalResults" aria-labelledby="totalResults-label">0</strong>
+            </div>
+            <div class="stat-item">
+              <span id="matchedResults-label">符合规则数量</span>
+              <strong id="matchedResults" aria-labelledby="matchedResults-label">0</strong>
+            </div>
+            <div class="stat-item">
+              <span id="currentFiltered-label">已屏蔽数量</span>
+              <strong id="currentFiltered" aria-labelledby="currentFiltered-label">0</strong>
+            </div>
+            <div class="stat-item">
+              <span id="totalFiltered-label">累计屏蔽数量</span>
+              <strong id="totalFiltered" aria-labelledby="totalFiltered-label">0</strong>
+            </div>
+          </div>
+        </section>
 
-      <div class="intro-container">
-        <h2>插件介绍</h2>
-        <div class="intro-content">
-          <p>「干净的页面」是一个去除搜索结果中无用站点的扩展程序。</p>
-          <p>默认支持过滤以下网站：</p>
-          <ul class="default-sites">
-            <li>CSDN (csdn.net 及其子域名)</li>
-            <li>知乎 (zhihu.com 及其子域名)</li>
-            <li>豆丁网 (docin.com)</li>
-            <li>DOC88 (doc88.com)</li>
-          </ul>
-          <p>您可以在「自定义规则」面板中添加或导入更多规则。</p>
-          <div class="rule-format">
-            <h3>规则格式规范：</h3>
-            <ul>
-              <li>普通域名：<code>example.com</code></li>
-              <li>泛域名：<code>*.example.com</code></li>
-              <li>域名路径：<code>example.com/*</code></li>
-              <li>泛域名路径：<code>*.example.com/*</code></li>
+        <section class="intro-container" aria-labelledby="intro-title">
+          <h2 id="intro-title">插件介绍</h2>
+          <div class="intro-content">
+            <img src="icons/ico48.ico" alt="" width="48" height="48" class="intro-icon" loading="lazy" aria-hidden="true">
+            <p>「干净的页面」是一个去除搜索结果中无用站点的扩展程序。</p>
+            <p>默认支持过滤以下网站：</p>
+            <ul class="default-sites">
+              <li>CSDN (csdn.net 及其子域名)</li>
+              <li>知乎 (zhihu.com 及其子域名)</li>
+              <li>豆丁网 (docin.com)</li>
+              <li>DOC88 (doc88.com)</li>
             </ul>
-            <p>注意：导入规则时，每行一个域名或泛域名，必须严格符合上述格式。</p>
+            <p>您可以在「自定义规则」面板中添加或导入更多规则。</p>
+            <div class="rule-format">
+              <h3>规则格式规范：</h3>
+              <ul>
+                <li><code>example.com</code> - 普通域名</li>
+                <li><code>*.example.com</code> - 泛域名</li>
+                <li><code>example.com/*</code> - 域名路径</li>
+                <li><code>*.example.com/*</code> - 泛域名路径</li>
+              </ul>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </section>
+      </section>
 
-    <!-- 自定义规则面板 -->
-    <div class="tab-content" id="custom-rules-tab">
-      <h2>自定义过滤规则</h2>
-      <div class="import-export-container">
-        <div class="import-container">
-          <h3>导入规则</h3>
-          <p class="description">支持导入txt格式的规则文件，每行一个域名或泛域名</p>
-          <div class="rule-format-small">
-            <p>有效格式示例：</p>
-            <pre>example.com
-            *.example.com
-            example.com/*
-            *.example.com/*
-            </pre>
+      <section class="tab-content" id="custom-rules-tab" role="tabpanel" aria-labelledby="custom-rules-tab">
+        <h2>
+          <img src="icons/ico16.ico" alt="" width="16" height="16" aria-hidden="true" loading="lazy">
+          自定义过滤规则
+        </h2>
+        
+        <div class="rules-actions">
+          <section class="import-action">
+            <h3>导入规则</h3>
+            <p>支持导入txt格式的规则文件，每行一个域名</p>
+            <div class="file-input-wrapper">
+              <input type="file" id="importFile" accept=".txt" aria-label="选择规则文件">
+              <button id="importBtn" class="primary-button">导入规则</button>
+            </div>
+          </section>
+
+          <section class="export-action">
+            <h3>导出规则</h3>
+            <p>将当前所有规则导出为txt文件</p>
+            <button id="exportBtn" class="secondary-button">导出规则</button>
+          </section>
+        </div>
+
+        <section class="rules-list-container">
+          <h3>当前规则列表</h3>
+          <div class="rules-list" id="customRulesList" role="list"></div>
+        </section>
+      </section>
+
+      <section class="tab-content" id="about-tab" role="tabpanel" aria-labelledby="about-tab">
+        <div class="about-content">
+          <img src="icons/ico128.ico" alt="" width="64" height="64" class="about-icon" loading="lazy" aria-hidden="true">
+          
+          <div class="about-info">
+            <h2>干净的页面 <span class="version-badge">v1.0.2</span></h2>
+            <dl>
+              <dt>作者</dt>
+              <dd>江湖笔者</dd>
+              <dt>仓库</dt>
+              <dd>
+                <a href="https://github.com/qinyuanchun03/ResultClean" target="_blank" rel="noopener noreferrer">
+                  GitHub
+                  <span class="visually-hidden">在新窗口打开</span>
+                </a>
+              </dd>
+              <dt>公众号</dt>
+              <dd>烟雨江南的小窝</dd>
+            </dl>
           </div>
-          <div class="file-input-container">
-            <input type="file" id="importFile" accept=".txt">
-            <button id="importBtn">导入规则</button>
+
+          <div class="about-description">
+            <p>去除搜索结果中的无用站点，支持泛域名匹配功能。</p>
+            <h3>规则格式说明</h3>
+            <ul class="rule-examples">
+              <li><code>csdn.net</code> - 普通域名</li>
+              <li><code>*.csdn.net</code> - 泛域名</li>
+              <li><code>csdn.net/*</code> - 域名路径</li>
+              <li><code>*.csdn.net/*</code> - 泛域名路径</li>
+            </ul>
           </div>
-        </div>
 
-        <div class="export-container">
-          <h3>导出规则</h3>
-          <p class="description">将当前所有规则导出为txt文件</p>
-          <button id="exportBtn">导出规则</button>
+          <p class="disclaimer">
+            本项目完全免费开源，请在GitHub下载正版
+            <span class="disclaimer-icon" aria-hidden="true">✓</span>
+          </p>
         </div>
-      </div>
-
-      <div class="custom-rules-list-container">
-        <h3>当前规则列表</h3>
-        <div class="rules-list" id="customRulesList">
-          <!-- 自定义规则列表将通过JS动态生成 -->
-        </div>
-      </div>
-    </div>
-
-    <!-- 关于插件面板 -->
-    <div class="tab-content" id="about-tab">
-      <h2>关于插件</h2>
-      <div class="about-content">
-        <p><strong>插件名称：</strong>干净的页面</p>
-        <p><strong>版本：</strong>1.0.1 <span class="version-badge">更新</span></p>
-        <p><strong>作者：</strong>江湖笔者</p>
-        <p><strong>仓库地址：</strong><a href="https://github.com/qinyuanchun03/ResultClean" target="_blank">https://github.com/qinyuanchun03/ResultClean</a></p>
-        <p><strong>联系方式：</strong></p>
-        <p>VX公众号：烟雨江南的小窝</p>
-        <p><strong>描述：</strong>去除搜索结果中的无用站点，支持泛域名匹配功能。</p>
-        <p><strong>使用说明：</strong></p>
-        <ul>
-          <li>普通域名规则：如 <code>csdn.net</code></li>
-          <li>泛域名规则：如 <code>*.csdn.net</code> 匹配所有子域名</li>
-          <li>域名路径规则：如 <code>csdn.net/*</code> 匹配所有路径</li>
-          <li>泛域名路径规则：如 <code>*.csdn.net/*</code> 匹配所有子域名和路径</li>
-        </ul>
-        <p class="disclaimer">本项目/插件完全免费，代码已在GitHub开源，喜欢请在GitHub下载正版。<span class="disclaimer-icon">&#10004;</span></p>
-      </div>
-    </div>
+      </section>
+    </main>
   </div>
-  <script src="popup.js"></script>
+  
+  <script src="popup.js" defer></script>
 </body>
 </html>
 
